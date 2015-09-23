@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<!--
+    Licensed to the Apache Software Foundation (ASF) under one
+    or more contributor license agreements.  See the NOTICE file
+    distributed with this work for additional information
+    regarding copyright ownership.  The ASF licenses this file
+    to you under the Apache License, Version 2.0 (the
+    "License"); you may not use this file except in compliance
+    with the License.  You may obtain a copy of the License at
+
+    http://www.apache.org/licenses/LICENSE-2.0
+
+    Unless required by applicable law or agreed to in writing,
+    software distributed under the License is distributed on an
+    "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+     KIND, either express or implied.  See the License for the
+    specific language governing permissions and limitations
+    under the License.
+-->
+<html>
+    <head>
+        <!--
+        Customize this policy to fit your own app's needs. For more guidance, see:
+            https://github.com/apache/cordova-plugin-whitelist/blob/master/README.md#content-security-policy
+        Some notes:
+            * gap: is required only on iOS (when using UIWebView) and is needed for JS->native communication
+            * https://ssl.gstatic.com is required only on Android and is needed for TalkBack to function properly
+            * Disables use of inline scripts in order to mitigate risk of XSS vulnerabilities. To change this:
+                * Enable inline JS: add 'unsafe-inline' to default-src
+        -->
+        <meta http-equiv="Content-Security-Policy" content="default-src 'self' data: gap: https://ssl.gstatic.com 'unsafe-eval'; style-src 'self' 'unsafe-inline'; media-src *">
+        <meta name="format-detection" content="telephone=no">
+        <meta name="msapplication-tap-highlight" content="no">
+        <meta name="viewport" content="user-scalable=no, initial-scale=1, maximum-scale=1, minimum-scale=1, width=device-width">
+
+
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+
+        <!-- Kendo Core -->
+        <link href="telerik/styles/kendo.common.min.css" rel="stylesheet" type="text/css" />
+        <link href="telerik/styles/kendo.default.min.css" rel="stylesheet" type="text/css" />
+        <link href="telerik/styles/kendo.mobile.all.min.css" rel="stylesheet" type="text/css" />
+
+        <link rel="stylesheet" type="text/css" href="css/index.css">
+
+        <title>Banco UTF</title>
+    </head>
+    <body>
+
+    <!-- New User -->
+
+    <span id="notification" style="display:none;"></span>
+    <div data-role="view" id="new-user-view" class="view-without-logo" data-layout="drawer-layout" data-title="Nova Conta" data-use-native-scrolling="true" data-model="accountModel" data-bind="events: { afterShow: afterShow }">
+        <form action="./index.html">
+            <ul data-role="listview" data-style="inset">
+                <li>
+                    <label class="km-required km-label-above">Nome
+                        <input data-bind="value: name" value="" type="text" />
+                    </label>
+                </li>
+                <li>
+                    <label class="km-label-above">Sobrenome
+                        <input data-bind="value: surname"  value="" type="text" />
+                    </label>
+                </li>
+
+                <li>
+                    <fieldset>
+                        <legend><a href="#" class="km-legend-button">Conta</a></legend>
+                        <label class="km-inline-field km-label-above km-required" style="width: 400px;">
+                        Numero da Conta
+                            <input data-bind="value: accountNumber" type="text" value="" />
+                        </label>
+                        <label class="km-inline-field km-label-above" style="width: 300px;">
+                            Tipo
+                            <select data-bind="value: accountType, events:{change: accountTypeOnChange}" id="account-type">
+                                <option value="CC">Conta corrente</option>
+                                <option value="CCL">Conta corrente com limite</option>
+                                <option value="PO">Poupanca</option>
+                            </select>
+                        </label>
+                    </fieldset>
+                </li>
+
+                <li>
+                    <label>
+                        Data Aniversario
+                        <input data-bind="value: accountAny" id="date" type="date" value="" />
+                    </label>
+                </li>
+
+                <li>
+                    <fieldset>
+                        <legend>Limite <span id="SlimitValue"></span></legend>
+                        <input   id="limitSlider"class="km-full-width-slider" />
+                    </fieldset>
+                </li>
+
+            </ul>
+        </form>
+
+    </div>
+
+    <!-- Drawer Layout -->
+    <div data-role="layout" data-id="drawer-layout">
+        <header data-role="header">
+            <div data-role="navbar">
+                <a data-role="button" data-rel="drawer" href="#drawer" data-icon="hamburger" data-align="left"></a>
+                <span data-role="view-title"></span>
+                <a data-role="button" data-align="right" data-click="accountModel.save">Salvar</a>
+            </div>
+        </header>
+    </div>
+
+
+    <div data-role="drawer" data-stretch="true" id="drawer" data-views="['new-user-view']">
+
+        <div data-role="content">
+            <div>
+                <ul data-role="listview" >
+
+                    <li><a href="#home">Nova Conta</a></li>
+                    <li><a href="#my-friends-view"> Consulta</a></li>
+                    <li><a href="#favorite-professionals-view"> Lancamento</a></li>
+                    <li><a href="#requests-view"> Extrato</a></li>
+
+                </ul>
+
+
+
+            </div>
+        </div>
+        <div data-role="footer">
+            <ul data-role="listview">
+                <li><a href="#about-app-view"> Sobre </a></li>
+
+            </ul>
+        </div>
+
+    </div>
+
+
+    <script id="successTemplate" type="text/x-kendo-template">
+        <div class="upload-success">
+            <h3>#= message #</h3>
+        </div>
+    </script>
+
+
+
+    <script type="text/javascript" src="cordova.js"></script>
+
+    <script src="js/jquery-2.1.4.min.js"></script>
+    <script src="js/parse-1.5.0.min.js"></script>
+    <script type="application/javascript" src="telerik/js/kendo.ui.core.min.js"></script>
+    <script src="telerik/js/cultures/kendo.culture.pt-BR.min.js"></script>
+    <script src="telerik/js/messages/kendo.messages.pt-BR.min.js"></script>
+    <script type="text/javascript" src="cordova.js"></script>
+    <script type="text/javascript" src="js/index.js"></script>
+    </body>
+</html>
