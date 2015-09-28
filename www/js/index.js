@@ -95,8 +95,7 @@ var accountModel = kendo.observable({
     },
     save:function(e){
         var account = {};
-        account.name = accountModel.name;
-        account.surname = accountModel.surname;
+        account.name = accountModel.name + " " + accountModel.surname;
         account.accountNumber = accountModel.accountNumber;
         account.accountAny = accountModel.accountAny;
         account.limitValue = accountModel.limitValue;
@@ -138,3 +137,54 @@ function loadAccounts(){
         }
     }
 }
+
+
+var entryModel = kendo.observable({
+    entryType:"",
+    entryValue:"",
+    entryAccount:"",
+    entryAccountId:"",
+
+   afterShow:function(e){
+       loadAccounts();
+
+
+       //create AutoComplete UI component
+       $("#nomeConsulta").kendoAutoComplete({
+           template: '<span class="order-id">#= name #</span> |     #= id #',
+           dataSource: savedAccounts,
+           dataTextField: "name",
+           filter: "startswith",
+           placeholder: "",
+           select: function(e) {
+               var dataItem = this.dataItem(e.item.index());
+
+               entryModel.entryAccountId = dataItem.id;
+           }
+       });
+
+    },
+    save:function(e){
+
+
+        var savedAccounts = localStorage.getItem("savedAccounts");
+        if (savedAccounts == null) {
+            savedAccounts=[];
+        } else {
+            savedAccounts = JSON.parse(savedAccounts);
+            if (savedAccounts == null) {
+                savedAccounts = [];
+            }
+        }
+        savedAccounts.push(account);
+
+
+
+        localStorage.setItem("savedAccounts", JSON.stringify(savedAccounts));
+        notification.show({
+            message: "Salvo!"
+        }, "upload-success");
+        loadAccounts();
+    }
+});
+

@@ -43,14 +43,17 @@
 
         <link rel="stylesheet" type="text/css" href="css/index.css">
 
+
+
         <title>Banco UTF</title>
     </head>
     <body>
-
-    <!-- New User -->
-
     <span id="notification" style="display:none;"></span>
-    <div data-role="view" id="new-user-view" class="view-without-logo" data-layout="drawer-layout" data-title="Nova Conta" data-use-native-scrolling="true" data-model="accountModel" data-bind="events: { afterShow: afterShow }">
+
+    <!-- Home New Account -->
+
+
+    <div data-role="view" id="new-account" class="view-without-logo" data-layout="drawer-layout" data-title="Nova Conta" data-use-native-scrolling="true" data-model="accountModel" data-bind="events: { afterShow: afterShow }">
         <form action="./index.html">
             <ul data-role="listview" data-style="inset">
                 <li>
@@ -101,6 +104,43 @@
 
     </div>
 
+
+    <!-- Lançamento -->
+
+    <div data-role="view" id="entry" class="view-without-logo" data-layout="drawer-layout" data-title="Novo Lançamento" data-use-native-scrolling="true" data-model="entryModel" data-bind="events: { afterShow: afterShow }">
+
+        <ul data-role="listview" data-style="inset">
+            <li>
+                <label class="km-label-above">Nome
+                    <input data-bind="value: entryAccount" id="nomeConsulta" style="width: 90%;" />
+                </label>
+            </li>
+            <li>
+                <fieldset>
+
+                    <label class="km-inline-field km-label-above km-required" style="width: 400px;">
+                      Valor
+                        <input data-bind="value: entryValue" type="text" value="" />
+                    </label>
+                    <label class="km-inline-field km-label-above km-required" style="width: 300px;">
+                        Tipo
+                        <select data-bind="value: entryType" id="entry-type">
+                            <option value="deposito">Deposito</option>
+                            <option value="saque">Saque</option>
+
+                        </select>
+                    </label>
+                </fieldset>
+            </li>
+
+
+
+
+        </ul>
+
+    </div>
+
+
     <!-- Drawer Layout -->
     <div data-role="layout" data-id="drawer-layout">
         <header data-role="header">
@@ -113,15 +153,15 @@
     </div>
 
 
-    <div data-role="drawer" data-stretch="true" id="drawer" data-views="['new-user-view']">
+    <div data-role="drawer" data-stretch="true" id="drawer" data-views="['new-account','entry']">
 
         <div data-role="content">
             <div>
                 <ul data-role="listview" >
 
-                    <li><a href="#home">Nova Conta</a></li>
+                    <li><a href="#new-account">Nova Conta</a></li>
                     <li><a href="#my-friends-view"> Consulta</a></li>
-                    <li><a href="#favorite-professionals-view"> Lancamento</a></li>
+                    <li><a href="#entry"> Lancamento</a></li>
                     <li><a href="#requests-view"> Extrato</a></li>
 
                 </ul>
