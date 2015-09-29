@@ -98,17 +98,22 @@
                         <input   id="limitSlider"class="km-full-width-slider" />
                     </fieldset>
                 </li>
+                <li>
+                    <div style="text-align: center;">
+                        <i></i> <a data-role="button" id="new-account-save" class="km-primary" data-align="center" data-click="accountModel.save" style="width: 40%">Salvar</a>
 
+                    </div>
+                </li>
             </ul>
+
         </form>
+
 
     </div>
 
 
     <!-- Lançamento -->
-
     <div data-role="view" id="entry" class="view-without-logo" data-layout="drawer-layout" data-title="Novo Lançamento" data-use-native-scrolling="true" data-model="entryModel" data-bind="events: { afterShow: afterShow }">
-
         <ul data-role="listview" data-style="inset">
             <li>
                 <label class="km-label-above">Nome
@@ -117,28 +122,47 @@
             </li>
             <li>
                 <fieldset>
-
                     <label class="km-inline-field km-label-above km-required" style="width: 400px;">
                       Valor
-                        <input data-bind="value: entryValue" type="text" value="" />
+                        <input data-bind="value: entryValue" type="number" value="" />
                     </label>
                     <label class="km-inline-field km-label-above km-required" style="width: 300px;">
                         Tipo
                         <select data-bind="value: entryType" id="entry-type">
                             <option value="deposito">Deposito</option>
                             <option value="saque">Saque</option>
-
                         </select>
                     </label>
                 </fieldset>
             </li>
+            <li>
+                <div style="text-align: center;">
+                    <i></i> <a data-role="button" id="new-entry-save" class="km-primary" data-align="center" data-click="entryModel.save" style="width: 40%">Salvar</a>
 
+                </div>
+            </li>
+        </ul>
+    </div>
 
+    <!-- Extrato -->
+    <div data-role="view" id="statement" class="view-without-logo" data-layout="drawer-layout" data-title="Extrato" data-use-native-scrolling="true" data-model="statementModel" data-bind="events: { afterShow: afterShow }">
+        <ul data-role="listview" data-style="inset">
+            <li>
+                <label class="km-label-above">Nome
+                    <input data-bind="value: statementAccount" id="nomeStatement" style="width: 90%;" />
+                </label>
+            </li>
 
-
+            <li>
+                <div style="text-align: center;">
+                    <i></i> <a data-role="button" id="statement-seach" class="km-primary" data-align="center" data-click="statementModel.search" style="width: 40%">Consultar</a>
+                </div>
+            </li>
         </ul>
 
+        <ul data-role="listview" data-template="template-statement" data-style="inset" data-source="statementModel.statementDataSource"></ul>
     </div>
+
 
 
     <!-- Drawer Layout -->
@@ -147,13 +171,13 @@
             <div data-role="navbar">
                 <a data-role="button" data-rel="drawer" href="#drawer" data-icon="hamburger" data-align="left"></a>
                 <span data-role="view-title"></span>
-                <a data-role="button" data-align="right" data-click="accountModel.save">Salvar</a>
+
             </div>
         </header>
     </div>
 
 
-    <div data-role="drawer" data-stretch="true" id="drawer" data-views="['new-account','entry']">
+    <div data-role="drawer" data-stretch="true" id="drawer" data-views="['new-account','entry','statement']">
 
         <div data-role="content">
             <div>
@@ -162,7 +186,7 @@
                     <li><a href="#new-account">Nova Conta</a></li>
                     <li><a href="#my-friends-view"> Consulta</a></li>
                     <li><a href="#entry"> Lancamento</a></li>
-                    <li><a href="#requests-view"> Extrato</a></li>
+                    <li><a href="#statement"> Extrato</a></li>
 
                 </ul>
 
@@ -186,16 +210,23 @@
         </div>
     </script>
 
+    <!-- Template Statement -->
+    <script type="text/x-kendo-template" id="template-statement">
+        <div>
 
+            #if(type == "deposito"){#
+            <span style="color: green"> + #:value#</span>
+            #}else{#
+            <span style="color: red">- #:value#</span>
+            #}#
+        </div>
+    </script>
 
-    <script type="text/javascript" src="cordova.js"></script>
 
     <script src="js/jquery-2.1.4.min.js"></script>
-    <script src="js/parse-1.5.0.min.js"></script>
     <script type="application/javascript" src="telerik/js/kendo.ui.core.min.js"></script>
     <script src="telerik/js/cultures/kendo.culture.pt-BR.min.js"></script>
     <script src="telerik/js/messages/kendo.messages.pt-BR.min.js"></script>
-    <script type="text/javascript" src="cordova.js"></script>
     <script type="text/javascript" src="js/index.js"></script>
     </body>
 </html>

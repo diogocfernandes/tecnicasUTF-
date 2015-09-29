@@ -31,7 +31,7 @@ var notification = $("#notification").kendoNotification({
         top: 30,
         right: 30
     },
-    autoHideAfter: 0,
+    autoHideAfter: 10,
     stacking: "down",
     templates: [{
         type: "upload-success",
@@ -138,6 +138,18 @@ function loadAccounts(){
     }
 }
 
+function loadEntrys(){
+    var accountEntry = localStorage.getItem("accountEntry");
+    if (accountEntry == null) {
+        accountEntry=[];
+    } else {
+        accountEntry = JSON.parse(accountEntry);
+        if (accountEntry == null) {
+            accountEntry = [];
+        }
+    }
+    return accountEntry;
+}
 
 var entryModel = kendo.observable({
     entryType:"",
@@ -145,46 +157,96 @@ var entryModel = kendo.observable({
     entryAccount:"",
     entryAccountId:"",
 
-   afterShow:function(e){
-       loadAccounts();
+    afterShow:function(e){
+        loadAccounts();
 
 
-       //create AutoComplete UI component
-       $("#nomeConsulta").kendoAutoComplete({
-           template: '<span class="order-id">#= name #</span> |     #= id #',
-           dataSource: savedAccounts,
-           dataTextField: "name",
-           filter: "startswith",
-           placeholder: "",
-           select: function(e) {
-               var dataItem = this.dataItem(e.item.index());
+        //create AutoComplete UI component
+        $("#nomeConsulta").kendoAutoComplete({
+            template: '<span class="order-id">#= name #</span> |     #= id #',
+            dataSource: savedAccounts,
+            dataTextField: "name",
+            filter: "startswith",
+            placeholder: "",
+            select: function(e) {
+                var dataItem = this.dataItem(e.item.index());
 
-               entryModel.entryAccountId = dataItem.id;
-           }
-       });
+                entryModel.entryAccountId = dataItem.id;
+            }
+        });
 
     },
     save:function(e){
+        var entry = {};
+        entry.type = entryModel.entryType;
+        entry.accountId = entryModel.entryAccountId;
+        entry.value = entryModel.entryValue;
 
 
-        var savedAccounts = localStorage.getItem("savedAccounts");
-        if (savedAccounts == null) {
-            savedAccounts=[];
+        var accountEntry = localStorage.getItem("accountEntry");
+        if (accountEntry == null) {
+            accountEntry=[];
         } else {
-            savedAccounts = JSON.parse(savedAccounts);
-            if (savedAccounts == null) {
-                savedAccounts = [];
+            accountEntry = JSON.parse(accountEntry);
+            if (accountEntry == null) {
+                accountEntry = [];
             }
         }
-        savedAccounts.push(account);
+        accountEntry.push(entry);
 
 
 
-        localStorage.setItem("savedAccounts", JSON.stringify(savedAccounts));
+        localStorage.setItem("accountEntry", JSON.stringify(accountEntry));
         notification.show({
             message: "Salvo!"
         }, "upload-success");
-        loadAccounts();
+
     }
 });
+
+var statementModel = kendo.observable({
+    statementAccount:"",
+    statementAccountId:"",
+    statementDataSource: new kendo.data.DataSource({
+        data: [],
+        sort: {dir: "desc", field: "createdAt"}
+    }),
+
+    afterShow:function(e){
+        loadAccounts();
+
+        //create AutoComplete UI component
+        $("#nomeStatement").kendoAutoComplete({
+            template: '<span class="order-id">#= name #</span> |     #= id #',
+            dataSource: savedAccounts,
+            dataTextField: "name",
+            filter: "startswith",
+            placeholder: "",
+            select: function(e) {
+                var dataItem = this.dataItem(e.item.index());
+
+                statementModel.statementAccountId = dataItem.id;
+            }
+        });
+
+    },
+    search:function(e){
+        var entryFull, entry = [];
+        entryFull = loadEntrys();
+        var size = entryFull.length;
+        for (var i = 0;i < size ;i ++){
+            var thisEntry = entryFull[i];
+            if (thisEntry.accountId == statementModel.statementAccountId ){
+                entry.push(thisEntry);
+            }
+        }
+        statementModel.statementDataSource.data(entry);
+
+
+    }
+});
+
+function saveMethod (e){
+    console.log(e);
+}
 
